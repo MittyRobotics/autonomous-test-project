@@ -1,0 +1,16 @@
+  
+# Java
+
+# Build
+build
+out
+
+# Gradle
+.gradle
+
+# IntelliJ
+.idea
+
+# MacOSX
+.DS_Store
+tko2019-new.iml
