@@ -7,24 +7,22 @@
 
 package com.amhsrobotics;
 
+import com.amhsrobotics.commands.TankDrive;
+import com.amhsrobotics.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.amhsrobotics.commands.ExampleCommand;
-import com.amhsrobotics.subsystems.ExampleSubsystem;
 
 public class Robot extends TimedRobot {
-  public static OI m_oi;
 
   @Override
   public void robotInit() {
-    m_oi = new OI();
+    DriveTrain.getInstance();
+    OI.getInstance();
   }
 
   @Override
   public void robotPeriodic() {
+    Scheduler.getInstance().run();
   }
 
   @Override
@@ -33,7 +31,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
+
   }
 
 
@@ -44,17 +42,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+
   }
 
   @Override
   public void teleopInit() {
-
+    new TankDrive().start();
   }
 
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+
   }
 
 
