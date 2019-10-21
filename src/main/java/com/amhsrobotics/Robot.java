@@ -62,9 +62,6 @@ public class Robot extends TimedRobot {
   }
 
 
-  double driveDeadzone = 0.01;
-  double turnDeadzone = 0.05;
-
   @Override
   public void teleopPeriodic() {
 
@@ -86,6 +83,8 @@ public class Robot extends TimedRobot {
     }
 
     //Turn drive
+    double turnDeadzone = 0.05;
+    double driveDeadzone = 0.01;
     if(Math.abs(drive) > driveDeadzone && Math.abs(turn) > turnDeadzone){
       double[] wheelSpeeds = wheelSpeedFromRadius(radius,drive);
 
@@ -98,7 +97,7 @@ public class Robot extends TimedRobot {
       talonRight.set(drive);
     }
     //Turn in place
-    else if(Math.abs(drive) < driveDeadzone&& Math.abs(turn) > turnDeadzone){
+    else if(Math.abs(drive) < driveDeadzone && Math.abs(turn) > turnDeadzone){
       talonLeft.set(turn);
       talonRight.set(-turn);
     }
@@ -123,12 +122,12 @@ public class Robot extends TimedRobot {
 
 
     if(lSpeed < rSpeed){
-      double speedRatio = rSpeed/lSpeed;
+      double speedRatio = lSpeed/rSpeed;
       rSpeed = d;
       lSpeed = d * speedRatio;
     }
     else{
-      double speedRatio = lSpeed/rSpeed;
+      double speedRatio = rSpeed/lSpeed;
       rSpeed = d * speedRatio;
       lSpeed = d;
     }
@@ -137,7 +136,7 @@ public class Robot extends TimedRobot {
   }
 
 
-  CheesyDriveHelper driveHelper = new CheesyDriveHelper();
+  private CheesyDriveHelper driveHelper = new CheesyDriveHelper();
   @Override
   public void testPeriodic() {
 
