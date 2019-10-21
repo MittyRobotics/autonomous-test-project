@@ -67,43 +67,46 @@ public class Robot extends TimedRobot {
 
 
   }
+
+
   double driveDeadzone = 0.01;
   double turnDeadzone = 0.05;
-  double maxSpeed;
+
   @Override
   public void teleopPeriodic() {
     //System.out.println(controller.getTriggerAxis(GenericHID.Hand.kRight) );
 
     double t = Math.sin(controller.getX(GenericHID.Hand.kLeft)) /2;
     double d = -((controller.getX()+1) /8) + ((controller.getTriggerAxis(GenericHID.Hand.kRight)+1)/8);
-    d = d * (1-Math.abs((t/2)));
+    d = d * (1-Math.abs((t/1.5)));
 
-    double r = Math.pow(cot(t*(Math.PI/2)),2) * Math.signum(t) * -Math.signum(d);
+    if(!controller.getXButton()){
+      d = d*2;
+    }
 
-    talonLeft.set(leftSpeedFromRadius(r,d));
-    talonRight.set(rightSpeedFromRadius(r,d));
 
-    if(Math.abs(d) > driveDeadzone && Math.abs(t) < turnDeadzone){
+    if(Math.abs(d) > driveDeadzone && Math.abs(t) > turnDeadzone){
+      double r = Math.pow(cot(t*(Math.PI/2)),2) * Math.signum(t) * -Math.signum(d);
+
+      talonLeft.set(leftSpeedFromRadius(r,d));
+      talonRight.set(rightSpeedFromRadius(r,d));
+    }
+    else if(Math.abs(d) > driveDeadzone && Math.abs(t) < turnDeadzone){
       talonLeft.set(d);
       talonRight.set(d);
     }
-
-    if(Math.abs(d) < driveDeadzone && Math.abs(t) < turnDeadzone){
+    else if(Math.abs(d) < driveDeadzone&& Math.abs(t) > turnDeadzone){
+      talonLeft.set(t);
+      talonRight.set(-t);
+    }
+    else{
       talonLeft.stopMotor();
       talonRight.stopMotor();
     }
 
-    if(Math.abs(d) < driveDeadzone&& Math.abs(t) > turnDeadzone){
-      talonLeft.set(t);
-      talonRight.set(-t);
-    }
-
-
-
-
   }
 
-  double trackWidth = 21.2;
+  double trackWidth = 12.5;
 
   public double leftSpeedFromRadius(double r, double d) {
     double baseVelocity = d;
@@ -121,9 +124,27 @@ public class Robot extends TimedRobot {
     return angularVelocity * (r + (trackWidth / 2));
   }
 
-
+  CheesyDriveHelper driveHelper = new CheesyDriveHelper();
   @Override
   public void testPeriodic() {
+
+    double throttle =  -((controller.getX()+1) /2) + ((controller.getTriggerAxis(GenericHID.Hand.kRight)+1)/2);
+    double wheel = controller.getX(GenericHID.Hand.kLeft);
+
+    if(!controller.getXButton()){
+      throttle = throttle/4;
+    }
+
+    double[] drivePwm = driveHelper.cheesyDrive(throttle,wheel,Math.abs(throttle) < 0.01);
+
+    if(drivePwm[0] == 0 && drivePwm[1] == 0){
+      talonLeft.stopMotor();
+      talonRight.stopMotor();
+    }
+    else{
+      talonLeft.set(drivePwm[0]);
+      talonRight.set(drivePwm[1]);
+    }
   }
 
   private double cot(double x){
