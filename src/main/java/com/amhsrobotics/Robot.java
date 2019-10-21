@@ -7,15 +7,8 @@
 
 package com.amhsrobotics;
 
-import com.amhsrobotics.commands.TankDrive;
-import com.amhsrobotics.constants.DriveConstants;
-import com.amhsrobotics.subsystems.DriveTrain;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
-
-import java.awt.geom.Point2D;
 
 public class Robot extends TimedRobot {
 
@@ -74,31 +67,42 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //System.out.println(controller.getTriggerAxis(GenericHID.Hand.kRight) );
 
-    double t = Math.sin(controller.getX(GenericHID.Hand.kLeft)) /2;
-    double d = -((controller.getX()+1) /8) + ((controller.getTriggerAxis(GenericHID.Hand.kRight)+1)/8);
-    d = d * (1-Math.abs((t/1.5)));
+    //Right Trigger: controller.getX()
+    //Left Trigger: controller.getTriggerAxis(GenericHID.Hand.kRight)
+    //Left Joystick: controller.getX(GenericHID.Hand.kLeft)
 
-    if(!controller.getXButton()){
-      d = d*2;
+
+    //Combination of right (forward power) and left (backward power) trigger values for drive power
+    double drive =  -((controller.getX()+1) /2) + ((controller.getTriggerAxis(GenericHID.Hand.kRight)+1)/2);
+    //Right joystick value to adjust turning radius
+    double turn = controller.getX(GenericHID.Hand.kLeft);
+    //Radius of circle to follow
+    double radius = Math.pow(cot(turn*(Math.PI/2)),2) * Math.signum(turn) * -Math.signum(drive);
+
+    //Avoid divide by 0 errors
+    if(radius == 0){
+      radius = 0.001;
     }
 
+    //Turn drive
+    if(Math.abs(drive) > driveDeadzone && Math.abs(turn) > turnDeadzone){
+      double[] wheelSpeeds = wheelSpeedFromRadius(radius,drive);
 
-    if(Math.abs(d) > driveDeadzone && Math.abs(t) > turnDeadzone){
-      double r = Math.pow(cot(t*(Math.PI/2)),2) * Math.signum(t) * -Math.signum(d);
-
-      talonLeft.set(leftSpeedFromRadius(r,d));
-      talonRight.set(rightSpeedFromRadius(r,d));
+      talonLeft.set(wheelSpeeds[0]);
+      talonRight.set(wheelSpeeds[1]);
     }
-    else if(Math.abs(d) > driveDeadzone && Math.abs(t) < turnDeadzone){
-      talonLeft.set(d);
-      talonRight.set(d);
+    //Drive straight
+    else if(Math.abs(drive) > driveDeadzone && Math.abs(turn) < turnDeadzone){
+      talonLeft.set(drive);
+      talonRight.set(drive);
     }
-    else if(Math.abs(d) < driveDeadzone&& Math.abs(t) > turnDeadzone){
-      talonLeft.set(t);
-      talonRight.set(-t);
+    //Turn in place
+    else if(Math.abs(drive) < driveDeadzone&& Math.abs(turn) > turnDeadzone){
+      talonLeft.set(turn);
+      talonRight.set(-turn);
     }
+    //Brake
     else{
       talonLeft.stopMotor();
       talonRight.stopMotor();
@@ -106,23 +110,32 @@ public class Robot extends TimedRobot {
 
   }
 
-  double trackWidth = 12.5;
 
-  public double leftSpeedFromRadius(double r, double d) {
-    double baseVelocity = d;
 
-    double angularVelocity = baseVelocity / r;
+  public double[] wheelSpeedFromRadius(double r, double d) {
+    double trackWidth = 12.5;
 
-    return angularVelocity * (r - (trackWidth / 2));
+    double angularVelocity = d / r;
+
+    double lSpeed = angularVelocity * (r - (trackWidth / 2));
+    double rSpeed = angularVelocity * (r + (trackWidth / 2));
+
+
+
+    if(lSpeed < rSpeed){
+      double speedRatio = rSpeed/lSpeed;
+      rSpeed = d;
+      lSpeed = d * speedRatio;
+    }
+    else{
+      double speedRatio = lSpeed/rSpeed;
+      rSpeed = d * speedRatio;
+      lSpeed = d;
+    }
+
+    return new double[]{lSpeed,rSpeed};
   }
 
-  public double rightSpeedFromRadius(double r, double d) {
-    double baseVelocity = d;
-
-    double angularVelocity = baseVelocity / r;
-
-    return angularVelocity * (r + (trackWidth / 2));
-  }
 
   CheesyDriveHelper driveHelper = new CheesyDriveHelper();
   @Override
