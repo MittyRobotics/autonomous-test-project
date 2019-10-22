@@ -53,6 +53,33 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    double left = controller.getRawAxis(5);
+    double right = controller.getRawAxis(1);
+
+    double percentSlowdown = controller.getRawAxis(4) + 1;
+
+    double minSlowdown = .7;
+    double maxSlowdown = 1;
+
+    percentSlowdown = (percentSlowdown-0)/(2-0) * (maxSlowdown-minSlowdown) +minSlowdown;
+
+    double deadzone = 0.1;
+
+    if(Math.abs(left) > deadzone){
+      talonLeft.set(left * percentSlowdown);
+    }
+    else{
+      talonLeft.stopMotor();
+    }
+    if(Math.abs(right) > deadzone){
+      talonRight.set(right* percentSlowdown);
+    }
+    else{
+      talonRight.stopMotor();
+    }
+
+
+
   }
 
   @Override
@@ -72,15 +99,26 @@ public class Robot extends TimedRobot {
 
     //Combination of right (forward power) and left (backward power) trigger values for drive power
     double drive =  -((controller.getX()+1) /2) + ((controller.getTriggerAxis(GenericHID.Hand.kRight)+1)/2);
+
+
+    double radiusTurnGain = .1;
+    double pointTurnGain = .5;
+
+
     //Right joystick value to adjust turning radius
     double turn = controller.getX(GenericHID.Hand.kLeft);
+
+    double radiusTurn = Math.sqrt(Math.abs(turn)*radiusTurnGain) * Math.signum(turn);
+
     //Radius of circle to follow
-    double radius = Math.pow(cot(turn*(Math.PI/2)),2) * Math.signum(turn) * -Math.signum(drive);
+    double radius = Math.pow(cot(radiusTurn*(Math.PI/2)),2) * Math.signum(radiusTurn) * -Math.signum(drive);
 
     //Avoid divide by 0 errors
     if(radius == 0){
       radius = 0.001;
     }
+
+    ///System.out.println(radius);
 
     //Turn drive
     double turnDeadzone = 0.05;
@@ -98,8 +136,8 @@ public class Robot extends TimedRobot {
     }
     //Turn in place
     else if(Math.abs(drive) < driveDeadzone && Math.abs(turn) > turnDeadzone){
-      talonLeft.set(turn);
-      talonRight.set(-turn);
+      talonLeft.set(turn * pointTurnGain);
+      talonRight.set(-turn * pointTurnGain);
     }
     //Brake
     else{
@@ -112,7 +150,7 @@ public class Robot extends TimedRobot {
 
 
   public double[] wheelSpeedFromRadius(double r, double d) {
-    double trackWidth = 12.5;
+    double trackWidth = 19;
 
     double angularVelocity = d / r;
 
@@ -121,7 +159,7 @@ public class Robot extends TimedRobot {
 
 
 
-    if(lSpeed < rSpeed){
+    if(Math.abs(lSpeed) < Math.abs(rSpeed)){
       double speedRatio = lSpeed/rSpeed;
       rSpeed = d;
       lSpeed = d * speedRatio;
