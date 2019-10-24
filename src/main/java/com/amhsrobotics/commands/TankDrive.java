@@ -1,6 +1,9 @@
 package com.amhsrobotics.commands;
 
+import com.amhsrobotics.OI;
 import com.amhsrobotics.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class TankDrive extends Command {
@@ -14,7 +17,22 @@ public class TankDrive extends Command {
 
 	@Override
 	protected void execute() {
-
+		double left = 0;
+		double right = 0;
+		double threshold = 0.1;
+		if(Math.abs(OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft)) > threshold){
+			left = OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft);
+		}
+		else{
+			left = 0;
+		}
+		if(Math.abs(OI.getInstance().getDriveController().getY(GenericHID.Hand.kRight)) > threshold){
+			right = OI.getInstance().getDriveController().getY(GenericHID.Hand.kRight);
+		}
+		else{
+			right = 0;
+		}
+		DriveTrain.getInstance().tankDrive(left,right);
 	}
 
 	@Override
