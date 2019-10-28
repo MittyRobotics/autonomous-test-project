@@ -1,4 +1,4 @@
-package com.amhsrobotics.commands;
+package com.amhsrobotics.autonomous.commands;
 
 import com.amhsrobotics.constants.DriveConstants;
 import com.amhsrobotics.motionprofile.TrapezoidalMotionProfile;

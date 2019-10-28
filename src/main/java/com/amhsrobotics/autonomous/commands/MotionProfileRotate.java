@@ -1,4 +1,4 @@
-package com.amhsrobotics.commands;
+package com.amhsrobotics.autonomous.commands;
 
 import com.amhsrobotics.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.command.Command;

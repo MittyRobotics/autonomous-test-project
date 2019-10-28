@@ -1,16 +1,9 @@
-package com.amhsrobotics.commands;
+package com.amhsrobotics.autonomous.commands;
 
-import com.amhsrobotics.OI;
-import com.amhsrobotics.constants.DriveConstants;
 import com.amhsrobotics.purepursuit.PurePursuitController;
 import com.amhsrobotics.purepursuit.PurePursuitOutput;
-import com.amhsrobotics.purepursuit.VelocityConstraints;
-import com.amhsrobotics.purepursuit.coordinate.Coordinate;
-import com.amhsrobotics.purepursuit.paths.CubicHermitePath;
 import com.amhsrobotics.purepursuit.paths.Path;
 import com.amhsrobotics.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Translate2dTrajectory extends Command {

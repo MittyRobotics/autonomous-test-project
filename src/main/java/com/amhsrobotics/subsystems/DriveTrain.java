@@ -1,7 +1,6 @@
 package com.amhsrobotics.subsystems;
 
-import com.amhsrobotics.commands.TankDrive;
-import com.amhsrobotics.constants.DriveConstants;
+import com.amhsrobotics.autonomous.commands.TankDrive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;

@@ -1,8 +1,7 @@
-package com.amhsrobotics.commands;
+package com.amhsrobotics.autonomous.commands;
 
 import com.amhsrobotics.OI;
 import com.amhsrobotics.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
 

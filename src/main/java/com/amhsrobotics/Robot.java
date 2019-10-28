@@ -7,7 +7,7 @@
 
 package com.amhsrobotics;
 
-import com.amhsrobotics.commands.TankDrive;
+import com.amhsrobotics.autonomous.commands.TankDrive;
 import com.amhsrobotics.subsystems.DriveTrain;
 import com.amhsrobotics.subsystems.Gyro;
 import edu.wpi.first.wpilibj.*;
