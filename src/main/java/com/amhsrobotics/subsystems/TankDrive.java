@@ -1,4 +1,4 @@
-package com.amhsrobotics.autonomous.commands;
+package com.amhsrobotics.subsystems;
 
 import com.amhsrobotics.OI;
 import com.amhsrobotics.subsystems.DriveTrain;
@@ -20,13 +20,13 @@ public class TankDrive extends Command {
 		double right = 0;
 		double threshold = 0.1;
 		if(Math.abs(OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft)) > threshold){
-			left = OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft);
+			left = -OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft);
 		}
 		else{
 			left = 0;
 		}
 		if(Math.abs(OI.getInstance().getDriveController().getY(GenericHID.Hand.kRight)) > threshold){
-			right = OI.getInstance().getDriveController().getY(GenericHID.Hand.kRight);
+			right = -OI.getInstance().getDriveController().getY(GenericHID.Hand.kRight);
 		}
 		else{
 			right = 0;

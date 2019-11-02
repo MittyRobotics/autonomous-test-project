@@ -3,8 +3,8 @@ package com.amhsrobotics.constants;
 import com.amhsrobotics.motionprofile.datatypes.VelocityConstraints;
 
 public class DriveConstants {
-	public static final int[] LEFT_DRIVE_TALON_ID = {20, 21};
-	public static final int[] RIGHT_DRIVE_TALON_ID = {23, 22};
+	public static final int[] LEFT_DRIVE_TALON_ID = {40, 7};
+	public static final int[] RIGHT_DRIVE_TALON_ID = {0,1};
 
 	public static final boolean[] LEFT_DRIVE_TALON_INVERSION = {false, false};
 	public static final boolean[] RIGHT_DRIVE_TALON_INVERSION = {true, true};

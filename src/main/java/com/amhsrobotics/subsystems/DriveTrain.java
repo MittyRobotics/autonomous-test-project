@@ -1,6 +1,5 @@
 package com.amhsrobotics.subsystems;
 
-import com.amhsrobotics.autonomous.commands.TankDrive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -55,11 +54,13 @@ public class DriveTrain extends Subsystem {
 			}
 			rightDrive[i] = talonSRX;
 		}
+		leftDrive[1].set(ControlMode.Follower,LEFT_DRIVE_TALON_ID[0]);
+		rightDrive[1].set(ControlMode.Follower,RIGHT_DRIVE_TALON_ID[0]);
 	}
 
 	@Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new TankDrive());
+//		setDefaultCommand(new TankDrive());
 	}
 
 	public void tankDrive(double left, double right) {
@@ -72,17 +73,13 @@ public class DriveTrain extends Subsystem {
 
 		if (Math.abs(left) < 0.1) {
 			leftDrive[0].set(ControlMode.PercentOutput, 0);
-			leftDrive[1].set(ControlMode.PercentOutput, 0);
 		} else {
 			leftDrive[0].set(ControlMode.PercentOutput, left);
-			leftDrive[1].set(ControlMode.PercentOutput, left);
 		}
 		if (Math.abs(right) < 0.1) {
 			rightDrive[0].set(ControlMode.PercentOutput, 0);
-			rightDrive[1].set(ControlMode.PercentOutput, 0);
 		} else {
 			rightDrive[0].set(ControlMode.PercentOutput, right);
-			rightDrive[1].set(ControlMode.PercentOutput, right);
 		}
 	}
 

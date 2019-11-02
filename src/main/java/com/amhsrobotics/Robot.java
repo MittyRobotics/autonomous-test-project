@@ -7,7 +7,7 @@
 
 package com.amhsrobotics;
 
-import com.amhsrobotics.autonomous.commands.TankDrive;
+import com.amhsrobotics.subsystems.TankDrive;
 import com.amhsrobotics.subsystems.DriveTrain;
 import com.amhsrobotics.subsystems.Gyro;
 import edu.wpi.first.wpilibj.*;
@@ -56,10 +56,13 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         new TankDrive().start();
+        //DriveTrain.getInstance().tankDrive(.3,.3,1);
+        //System.out.println("test");
     }
 
     @Override
     public void teleopPeriodic() {
+        //System.out.println(" Left: " + DriveTrain.getInstance().getLeftEncoder() + " Right: " + DriveTrain.getInstance().getRightEncoder() + " Gyro: " + Gyro.getInstance().getAngle());
 
     }
 
