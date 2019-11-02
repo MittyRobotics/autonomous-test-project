@@ -1,6 +1,7 @@
 package com.amhsrobotics;
 
 import com.amhsrobotics.constants.DriveConstants;
+import com.amhsrobotics.purepursuit.PathFollowerPosition;
 import com.amhsrobotics.subsystems.DriveTrain;
 import com.amhsrobotics.subsystems.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +41,7 @@ public class Odometry implements Runnable {
         robotX += deltaPosition * Math.sin(Math.toRadians(robotHeading));
         lastLeftEncoderPos =  DriveTrain.getInstance().getLeftEncoder();
         lastRightEncoderPos = DriveTrain.getInstance().getRightEncoder();
+        PathFollowerPosition.getInstance().update(robotX,robotY,robotHeading,DriveTrain.getInstance().getLeftVelocity(), DriveTrain.getInstance().getRightVelocity());
         SmartDashboard.putNumber("odometry_X", robotX);
         SmartDashboard.putNumber("odometry_Y", robotY);
         SmartDashboard.putNumber("odometry_Heading", robotHeading);

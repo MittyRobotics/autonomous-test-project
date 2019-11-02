@@ -7,6 +7,7 @@
 
 package com.amhsrobotics;
 
+import com.amhsrobotics.purepursuit.PathFollowerPosition;
 import com.amhsrobotics.subsystems.TankDrive;
 import com.amhsrobotics.subsystems.DriveTrain;
 import com.amhsrobotics.subsystems.Gyro;
@@ -26,7 +27,10 @@ public class Robot extends TimedRobot {
         DriveTrain.getInstance();
         DriveTrain.getInstance().initHardware();
         Gyro.getInstance();
-
+        Notifier odometryNotifier = new Notifier(Odometry.getInstance());
+        odometryNotifier.startPeriodic(0.06);
+        //TODO: measure track width
+        PathFollowerPosition.getInstance().setupRobot(27);
     }
 
     @Override
@@ -55,9 +59,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        //TODO: calibrate ticks per inch
+        //TODO: test odometry and PathFollowerPosition
         new TankDrive().start();
-        //DriveTrain.getInstance().tankDrive(.3,.3,1);
-        //System.out.println("test");
     }
 
     @Override

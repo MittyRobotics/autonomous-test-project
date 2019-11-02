@@ -16,8 +16,8 @@ public class TankDrive extends Command {
 
 	@Override
 	protected void execute() {
-		double left = 0;
-		double right = 0;
+		double left;
+		double right;
 		double threshold = 0.1;
 		if(Math.abs(OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft)) > threshold){
 			left = -OI.getInstance().getDriveController().getY(GenericHID.Hand.kLeft);

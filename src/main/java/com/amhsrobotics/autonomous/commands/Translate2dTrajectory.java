@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Translate2dTrajectory extends Command {
 	private Path path;
+	private boolean reversed;
 	private PurePursuitController controller;
 
-	public Translate2dTrajectory(Path path) {
+	public Translate2dTrajectory(Path path, boolean reversed) {
 		requires(DriveTrain.getInstance());
-
-	
 		this.path = path;
+		this.reversed = reversed;
 	}
 	
 	@Override
 	protected void initialize() {
-		this.controller = new PurePursuitController(path);
+		this.controller = new PurePursuitController(path, reversed);
 	}
 	
 	@Override
