@@ -2,6 +2,7 @@ package com.amhsrobotics.autonomous.commands;
 
 import com.amhsrobotics.purepursuit.PurePursuitController;
 import com.amhsrobotics.purepursuit.PurePursuitOutput;
+import com.amhsrobotics.purepursuit.VelocityConstraints;
 import com.amhsrobotics.purepursuit.paths.Path;
 import com.amhsrobotics.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.command.Command;
@@ -15,31 +16,36 @@ public class Translate2dTrajectory extends Command {
 		requires(DriveTrain.getInstance());
 		this.path = path;
 		this.reversed = reversed;
+		this.controller = new PurePursuitController(path, new VelocityConstraints(10000,10000,150), reversed);
+		System.out.println("Constructor");
 	}
-	
+
 	@Override
 	protected void initialize() {
-		this.controller = new PurePursuitController(path, reversed);
+		System.out.println("Init");
 	}
-	
+
 	@Override
 	protected void execute() {
 		double t = timeSinceInitialized();
 		PurePursuitOutput output = controller.update(t);
-		
-		DriveTrain.getInstance().tankVelocity(output.getLeftVelocity(), output.getRightVelocity());
+
+		System.out.println("Expected: " + output.getLeftVelocity() + " " + output.getRightVelocity());
+
+		DriveTrain.getInstance().customTankVelocity(output.getLeftVelocity(), output.getRightVelocity());
 	}
-	
+
 	@Override
 	protected boolean isFinished() {
-		return controller.isFinished();
+		return false;
 	}
-	
+
 	@Override
 	protected void end() {
-		DriveTrain.getInstance().tankVelocity(path.getVelocityConstraints().getEndVelocity(),path.getVelocityConstraints().getEndVelocity());
+		System.out.println("End Translate2dTrajectory");
+		//DriveTrain.getInstance().tankDrive(0,0);
 	}
-	
+
 	@Override
 	protected void interrupted() {
 	}

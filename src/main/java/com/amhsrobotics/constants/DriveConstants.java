@@ -14,7 +14,7 @@ public class DriveConstants {
 
 	public static final double[] DRIVE_PID = {2, 0, 0};
 
-	public static final double DRIVE_TICKS_PER_INCH =  99.9;
+	public static final double DRIVE_TICKS_PER_INCH =  165.0;
 	
 	public static final double MAX_ACCELERATION = 20; //in/sec^2
 	public static final double MAX_DECELERATION = 20; //in/sec^2

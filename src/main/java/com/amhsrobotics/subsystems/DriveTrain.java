@@ -64,23 +64,15 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public void tankDrive(double left, double right) {
-		tankDrive(left, right, 0.5);
+		tankDrive(left, right, 1);
 	}
 
 	public void tankDrive(double left, double right, final double percentCap) {
 		left *= percentCap;
 		right *= percentCap;
 
-		if (Math.abs(left) < 0.1) {
-			leftDrive[0].set(ControlMode.PercentOutput, 0);
-		} else {
 			leftDrive[0].set(ControlMode.PercentOutput, left);
-		}
-		if (Math.abs(right) < 0.1) {
-			rightDrive[0].set(ControlMode.PercentOutput, 0);
-		} else {
 			rightDrive[0].set(ControlMode.PercentOutput, right);
-		}
 	}
 
 	public void tankVelocity(double left, double right) {
@@ -91,6 +83,51 @@ public class DriveTrain extends Subsystem {
 		leftDrive[1].set(ControlMode.PercentOutput, leftDrive[0].getMotorOutputPercent());
 		rightDrive[0].set(ControlMode.Velocity, right);
 		leftDrive[1].set(ControlMode.PercentOutput, rightDrive[0].getMotorOutputPercent());
+	}
+
+	double leftLastMeasured = 0;
+	double rightLastMeasured = 0;
+
+	double Kv = 0.12;
+	double Ka = 0.0;
+	double Kp = 0.001;
+
+	public void customTankVelocity(double leftVel, double rightVel){
+		double left;
+		double right;
+
+
+		double measuredLeft = DriveTrain.getInstance().getLeftVelocityInches();
+
+		double FFLeft = Kv * leftVel + Ka * ((measuredLeft - leftLastMeasured)/.02);
+
+		leftLastMeasured = measuredLeft;
+
+		double errorLeft = leftVel - measuredLeft;
+
+		double FBLeft = Kp * errorLeft;
+
+		left = (FFLeft + FBLeft);
+
+		left = Math.max(-12, Math.min(12,left));
+
+		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
+
+		double FFRight = Kv * rightVel + Ka * ((measuredRight - leftLastMeasured)/.02);
+
+		rightLastMeasured = measuredRight;
+
+		double errorRight = rightVel - measuredRight;
+
+		double FBRight = Kp * errorRight;
+
+		right = (FFRight + FBRight);
+
+		right = Math.max(-12, Math.min(12,right));
+
+		System.out.println("Tank Velocity");
+
+		DriveTrain.getInstance().tankDrive(left/12,right/12);
 	}
 
 	public void translation(final double leftDistance, final double rightDistance) {
@@ -117,12 +154,12 @@ public class DriveTrain extends Subsystem {
 		return rightDrive[0].getSelectedSensorPosition();
 	}
 
-	public double getLeftVelocity() {
-		return leftDrive[0].getSelectedSensorVelocity();
+	public double getLeftVelocityInches() {
+		return leftDrive[0].getSelectedSensorVelocity() * 10.0 / DRIVE_TICKS_PER_INCH;
 	}
 
-	public double getRightVelocity() {
-		return rightDrive[0].getSelectedSensorVelocity();
+	public double getRightVelocityInches() {
+		return rightDrive[0].getSelectedSensorVelocity() * 10.0 / DRIVE_TICKS_PER_INCH;
 	}
 
 }

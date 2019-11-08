@@ -2,6 +2,7 @@ package com.amhsrobotics;
 
 import com.amhsrobotics.constants.DriveConstants;
 import com.amhsrobotics.purepursuit.PathFollowerPosition;
+import com.amhsrobotics.purepursuit.coordinate.CoordinateManager;
 import com.amhsrobotics.subsystems.DriveTrain;
 import com.amhsrobotics.subsystems.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,7 +34,9 @@ public class Odometry implements Runnable {
         if(robotHeading < 0){
             robotHeading = robotHeading+360;
         }
-        robotHeading = 0-robotHeading;
+
+
+
         double deltaLeftPos = DriveTrain.getInstance().getLeftEncoder() - lastLeftEncoderPos;
         double deltaRightPos = DriveTrain.getInstance().getRightEncoder() - lastRightEncoderPos;
         double deltaPosition = (deltaLeftPos + deltaRightPos)/2/ DriveConstants.DRIVE_TICKS_PER_INCH;
@@ -41,10 +44,14 @@ public class Odometry implements Runnable {
         robotX += deltaPosition * Math.sin(Math.toRadians(robotHeading));
         lastLeftEncoderPos =  DriveTrain.getInstance().getLeftEncoder();
         lastRightEncoderPos = DriveTrain.getInstance().getRightEncoder();
-        PathFollowerPosition.getInstance().update(robotX,robotY,robotHeading,DriveTrain.getInstance().getLeftVelocity(), DriveTrain.getInstance().getRightVelocity());
-        SmartDashboard.putNumber("odometry_X", robotX);
-        SmartDashboard.putNumber("odometry_Y", robotY);
-        SmartDashboard.putNumber("odometry_Heading", robotHeading);
+
+
+        robotHeading = CoordinateManager.getInstance().mapAngle(robotHeading);
+
+        PathFollowerPosition.getInstance().update(robotX,robotY,robotHeading,DriveTrain.getInstance().getLeftVelocityInches(), DriveTrain.getInstance().getRightVelocityInches());
+        SmartDashboard.putNumber("odometry_X", PathFollowerPosition.getInstance().getX());
+        SmartDashboard.putNumber("odometry_Y", PathFollowerPosition.getInstance().getY());
+        SmartDashboard.putNumber("odometry_Heading", PathFollowerPosition.getInstance().getHeading());
     }
 
     public void resetPosition(){

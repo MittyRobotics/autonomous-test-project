@@ -51,14 +51,14 @@ repositories {
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Adds team1351 utils libraries from github using JitPack
-// Also defines JUnit 4.
+// Also defines JUnit 4
 dependencies {
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+    compile 'com.github.Mittyrobotics:pure-pursuit-controller:aebce22bc2'
     compile 'com.github.Mittyrobotics:motion-profile-generator:v2.0'
-    compile 'com.github.Mittyrobotics:pure-pursuit-controller:c146ca1027'
     compile 'com.github.Mittyrobotics:tko-common-controls:v1.1'
 
     // https://mvnrepository.com/artifact/org.jfree/jfreechart

@@ -23,12 +23,12 @@ public class VisualizePurePursuit {
 		};
 		Path path = new CubicHermitePath(coordinates, velocityConstraints);
 		
-		PurePursuitController controller = new PurePursuitController(path, 20, 10, false);
-		PathFollowerPosition.getInstance().update(0, 0, 0, 0, 0);
-		PathFollowerPosition.getInstance().setupRobot(27);
-		
-		PurePursuitSimulator simulator = new PurePursuitSimulator(controller, 60, PathFollowerPosition.getInstance().getTrackWidth());
-		simulator.start();
-		
+//		PurePursuitController controller = new PurePursuitController(path, 20, 10, false);
+//		PathFollowerPosition.getInstance().update(0, 0, 0, 0, 0);
+//		PathFollowerPosition.getInstance().setupRobot(27);
+//
+//		PurePursuitSimulator simulator = new PurePursuitSimulator(controller, 60, PathFollowerPosition.getInstance().getTrackWidth());
+//		simulator.start();
+//
 	}
 }
