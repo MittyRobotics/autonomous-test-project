@@ -20,6 +20,7 @@ import com.amhsrobotics.subsystems.Gyro;
 import com.amhsrobotics.subsystems.TankVelocity;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
@@ -39,18 +40,48 @@ public class Robot extends TimedRobot {
         odometryNotifier.startPeriodic(0.1);
         //TODO: measure track width
 
+        //FORWARD:
         Coordinate[] coordinates = new Coordinate[]{
-                new Coordinate(0,0,0),
-                new Coordinate(24,50,0)
+                new Coordinate(0, 0, 0),
+                new Coordinate(0, 30, 0),
+//                new Coordinate(-20, 50, -90),
+//                new Coordinate(-30, 50, -90),
+//                new Coordinate(-50, 70, 0),
+                new Coordinate(-50, 100, 0)
         };
-        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(20,20,100,10,20,0,.8));
+        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(70,20,150,20,50,0,.8));
         command = new Translate2dTrajectory(path,false);
 
+
+//
+////        //REVERSE:
+//
+//        Coordinate[] coordinates = new Coordinate[]{
+//                new Coordinate(0, 0, 180),
+//                new Coordinate(0, -30, 180),
+//                new Coordinate(20, -50, 90),
+//                new Coordinate(30, -50, 90),
+//                new Coordinate(50, -70, 180),
+//                new Coordinate(50, -100, 180)
+//        };
+//        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(70,20,150,20,50,0,.8));
+//        command = new Translate2dTrajectory(path,true);
+//
+////
+
+
+
+        SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT", 0);
+        SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT", 0);
+        SmartDashboard.putNumber("LEFT_WHEEL_VEL", 0);
+        SmartDashboard.putNumber("RIGHT_WHEEL_VEL", 0);
     }
 
     @Override
     public void robotPeriodic() {
         Scheduler.getInstance().run();
+        SmartDashboard.putNumber("LEFT_WHEEL_VEL", DriveTrain.getInstance().getLeftVelocityInches());
+        SmartDashboard.putNumber("RIGHT_WHEEL_VEL", DriveTrain.getInstance().getRightVelocityInches());
         //System.out.println(" Left: " + DriveTrain.getInstance().getLeftEncoder() / DriveConstants.DRIVE_TICKS_PER_INCH + " Right: " + DriveTrain.getInstance().getRightEncoder() / DriveConstants.DRIVE_TICKS_PER_INCH + " Gyro: " + Gyro.getInstance().getAngle());
     }
 
@@ -86,7 +117,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        System.out.println(" Left Vel: " + DriveTrain.getInstance().getLeftVelocityInches()  + " Right Vel: " + DriveTrain.getInstance().getRightVelocityInches());
+        //System.out.println(" Left Vel: " + DriveTrain.getInstance().getLeftVelocityInches()  + " Right Vel: " + DriveTrain.getInstance().getRightVelocityInches());
     }
 
     @Override

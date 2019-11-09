@@ -16,7 +16,7 @@ public class Translate2dTrajectory extends Command {
 		requires(DriveTrain.getInstance());
 		this.path = path;
 		this.reversed = reversed;
-		this.controller = new PurePursuitController(path, new VelocityConstraints(10000,10000,150), reversed);
+		this.controller = new PurePursuitController(path,20,15, new VelocityConstraints(10000,10000,150), reversed);
 		System.out.println("Constructor");
 	}
 

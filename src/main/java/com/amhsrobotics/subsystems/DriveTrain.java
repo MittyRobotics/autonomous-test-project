@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.amhsrobotics.constants.DriveConstants.*;
 
@@ -96,6 +97,9 @@ public class DriveTrain extends Subsystem {
 		double left;
 		double right;
 
+
+		SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT", leftVel);
+		SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT", rightVel);
 
 		double measuredLeft = DriveTrain.getInstance().getLeftVelocityInches();
 
