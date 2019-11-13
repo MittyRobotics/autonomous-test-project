@@ -1,5 +1,6 @@
 package com.amhsrobotics.subsystems;
 
+import com.amhsrobotics.purepursuit.coordinate.CoordinateManager;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -29,7 +30,7 @@ public class DriveTrain extends Subsystem {
 			WPI_TalonSRX talonSRX = new WPI_TalonSRX(LEFT_DRIVE_TALON_ID[i]);
 			talonSRX.configFactoryDefault();
 			talonSRX.setInverted(LEFT_DRIVE_TALON_INVERSION[i]);
-			talonSRX.setNeutralMode(NeutralMode.Brake);
+			talonSRX.setNeutralMode(NeutralMode.EEPROMSetting);
 			if (i == 0) {
 				talonSRX.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 				talonSRX.setSensorPhase(LEFT_DRIVE_ENCODER_INVERSION);
@@ -44,7 +45,7 @@ public class DriveTrain extends Subsystem {
 			WPI_TalonSRX talonSRX = new WPI_TalonSRX(RIGHT_DRIVE_TALON_ID[i]);
 			talonSRX.configFactoryDefault();
 			talonSRX.setInverted(RIGHT_DRIVE_TALON_INVERSION[i]);
-			talonSRX.setNeutralMode(NeutralMode.Brake);
+			talonSRX.setNeutralMode(NeutralMode.EEPROMSetting);
 			if (i == 0) {
 				talonSRX.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 				talonSRX.setSensorPhase(RIGHT_DRIVE_ENCODER_INVERSION);
@@ -89,30 +90,43 @@ public class DriveTrain extends Subsystem {
 	double leftLastMeasured = 0;
 	double rightLastMeasured = 0;
 
-	double Kv = 0.12;
-	double Ka = 0.0;
-	double Kp = 0.001;
+	double Kv = 0.12; //0.12
+	double Ka = 0.0; //0.0
+	double Kp = 0.001; //0.001
+	double Kt = 30;
 
-	public void customTankVelocity(double leftVel, double rightVel){
+	public void customTankVelocity(double leftVel, double rightVel, double angle){
 		double left;
 		double right;
 
+		angle = CoordinateManager.getInstance().mapAngle(angle);
+
+		SmartDashboard.putNumber("ANGLE_TO_LOOKAHEAD", angle);
+
+		angle = angle / 45;
+		angle = Math.max(-1, Math.min(angle,1));
+		double sign = Math.signum(angle);
+		angle = Math.pow(angle,2) * sign;
+
+		System.out.println(angle);
+
+		double turn = angle * Kt;
+
+		leftVel += turn;
+		rightVel -= turn;
 
 		SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT", leftVel);
 		SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT", rightVel);
 
+		SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT_MODIFIED", leftVel);
+		SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT_MODIFIED", rightVel);
+
 		double measuredLeft = DriveTrain.getInstance().getLeftVelocityInches();
-
 		double FFLeft = Kv * leftVel + Ka * ((measuredLeft - leftLastMeasured)/.02);
-
 		leftLastMeasured = measuredLeft;
-
 		double errorLeft = leftVel - measuredLeft;
-
 		double FBLeft = Kp * errorLeft;
-
 		left = (FFLeft + FBLeft);
-
 		left = Math.max(-12, Math.min(12,left));
 
 		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
@@ -129,9 +143,53 @@ public class DriveTrain extends Subsystem {
 
 		right = Math.max(-12, Math.min(12,right));
 
-		System.out.println("Tank Velocity");
+		left = left/12;
+		right = right/12;
 
-		DriveTrain.getInstance().tankDrive(left/12,right/12);
+
+		SmartDashboard.putNumber("LEFT_WHEEL_VOLTAGE", left);
+		SmartDashboard.putNumber("RIGHT_WHEEL_VOLTAGE", right);
+
+		DriveTrain.getInstance().tankDrive(left,right);
+	}
+
+	public void customTankVelocity(double leftVel, double rightVel){
+		double left;
+		double right;
+
+		SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT_MODIFIED", leftVel);
+		SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT_MODIFIED", rightVel);
+
+		double measuredLeft = DriveTrain.getInstance().getLeftVelocityInches();
+		double FFLeft = Kv * leftVel + Ka * ((measuredLeft - leftLastMeasured)/.02);
+		leftLastMeasured = measuredLeft;
+		double errorLeft = leftVel - measuredLeft;
+		double FBLeft = Kp * errorLeft;
+		left = (FFLeft + FBLeft);
+		left = Math.max(-12, Math.min(12,left));
+
+		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
+
+		double FFRight = Kv * rightVel + Ka * ((measuredRight - leftLastMeasured)/.02);
+
+		rightLastMeasured = measuredRight;
+
+		double errorRight = rightVel - measuredRight;
+
+		double FBRight = Kp * errorRight;
+
+		right = (FFRight + FBRight);
+
+		right = Math.max(-12, Math.min(12,right));
+
+		left = left/12;
+		right = right/12;
+
+		SmartDashboard.putNumber("LEFT_WHEEL_VOLTAGE", left);
+		SmartDashboard.putNumber("RIGHT_WHEEL_VOLTAGE", right);
+
+
+		DriveTrain.getInstance().tankDrive(left,right);
 	}
 
 	public void translation(final double leftDistance, final double rightDistance) {

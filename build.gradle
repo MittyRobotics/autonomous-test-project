@@ -57,7 +57,7 @@ dependencies {
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-    compile 'com.github.Mittyrobotics:pure-pursuit-controller:8be1418b8e'
+    compile 'com.github.Mittyrobotics:pure-pursuit-controller:c9cd5bc016'
     compile 'com.github.Mittyrobotics:motion-profile-generator:v2.0'
     compile 'com.github.Mittyrobotics:tko-common-controls:v1.1'
 

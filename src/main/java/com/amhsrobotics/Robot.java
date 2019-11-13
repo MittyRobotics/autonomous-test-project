@@ -43,18 +43,14 @@ public class Robot extends TimedRobot {
         //FORWARD:
         Coordinate[] coordinates = new Coordinate[]{
                 new Coordinate(0, 0, 0),
-                new Coordinate(0, 30, 0),
-//                new Coordinate(-20, 50, -90),
-//                new Coordinate(-30, 50, -90),
-//                new Coordinate(-50, 70, 0),
                 new Coordinate(-50, 100, 0)
         };
-        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(70,20,150,20,50,0,.8));
+
+        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(40,20,100,10,20,0,.8));
         command = new Translate2dTrajectory(path,false);
 
 
-//
-////        //REVERSE:
+//        //REVERSE:
 //
 //        Coordinate[] coordinates = new Coordinate[]{
 //                new Coordinate(0, 0, 180),
@@ -66,15 +62,16 @@ public class Robot extends TimedRobot {
 //        };
 //        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(70,20,150,20,50,0,.8));
 //        command = new Translate2dTrajectory(path,true);
-//
-////
-
-
 
         SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT", 0);
         SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT", 0);
         SmartDashboard.putNumber("LEFT_WHEEL_VEL", 0);
         SmartDashboard.putNumber("RIGHT_WHEEL_VEL", 0);
+        SmartDashboard.putNumber("LEFT_WHEEL_SETPOINT_MODIFIED", 0);
+        SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT_MODIFIED", 0);
+        SmartDashboard.putNumber("LEFT_WHEEL_VOLTAGE", 0);
+        SmartDashboard.putNumber("RIGHT_WHEEL_VOLTAGE", 0);
+        SmartDashboard.putNumber("ANGLE_TO_LOOKAHEAD", 0);
     }
 
     @Override
@@ -93,7 +90,6 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
 
     }
-
 
     @Override
     public void autonomousInit() {
