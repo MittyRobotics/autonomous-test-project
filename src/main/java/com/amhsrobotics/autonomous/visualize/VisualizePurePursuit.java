@@ -1,5 +1,6 @@
 package com.amhsrobotics.autonomous.visualize;
 
+import com.amhsrobotics.autonomous.commands.Translate2dTrajectory;
 import com.amhsrobotics.purepursuit.PathFollowerPosition;
 import com.amhsrobotics.purepursuit.PurePursuitController;
 import com.amhsrobotics.purepursuit.PurePursuitSimulator;
@@ -16,12 +17,11 @@ public class VisualizePurePursuit {
 		//FORWARD:
 		Coordinate[] coordinates = new Coordinate[]{
 				new Coordinate(0, 0, 0),
-//                new Coordinate(0, 30, 0),
-//                new Coordinate(-50, 80, 0),
+				new Coordinate(-50, 74, 0),
 				new Coordinate(-50, 100, 0)
 		};
-		Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,20,150,20,30,0,2));
 
+		Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,50,150,10,50,0,.8), 100, 2);
 		PurePursuitSimulatorGraph.getInstance().graphPath(path);
 		PurePursuitSimulatorGraph.getInstance().resizeGraph();
 //		PurePursuitController controller = new PurePursuitController(path, 20, 10, false);

@@ -7,6 +7,8 @@
 
 package com.amhsrobotics;
 
+import com.amhsrobotics.autonomous.commands.CommandGroupForTesting;
+import com.amhsrobotics.autonomous.commands.MotionProfileTranslate;
 import com.amhsrobotics.autonomous.commands.Translate2dTrajectory;
 import com.amhsrobotics.constants.DriveConstants;
 import com.amhsrobotics.purepursuit.PathFollowerPosition;
@@ -43,10 +45,11 @@ public class Robot extends TimedRobot {
         //FORWARD:
         Coordinate[] coordinates = new Coordinate[]{
                 new Coordinate(0, 0, 0),
+                new Coordinate(-50, 70, 0),
                 new Coordinate(-50, 100, 0)
         };
 
-        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(40,20,100,10,20,0,.8));
+        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,30,150,10,50,0,.8));
         command = new Translate2dTrajectory(path,false);
 
 
@@ -96,6 +99,8 @@ public class Robot extends TimedRobot {
         //new TankVelocity(20).start();
         PathFollowerPosition.getInstance().setupRobot(27);
         command.start();
+        //new MotionProfileTranslate(-48).start();
+        //new CommandGroupForTesting().start();
     }
 
     @Override

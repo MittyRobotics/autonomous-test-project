@@ -28,13 +28,14 @@ public class MotionProfileTranslate extends Command {
 	}
 	public MotionProfileTranslate(double setpoint, VelocityConstraints velocityConstraints) {
 		requires(DriveTrain.getInstance());
-		
+		System.out.println("Constructor");
 		this.setpoint = setpoint;
 		this.velocityConstraints = velocityConstraints;
 	}
 	
 	@Override
 	protected void initialize() {
+		System.out.println("Init");
 		leftStartPos = DriveTrain.getInstance().getLeftEncoder()/DriveConstants.DRIVE_TICKS_PER_INCH;
 		rightStartPos = DriveTrain.getInstance().getRightEncoder()/DriveConstants.DRIVE_TICKS_PER_INCH;
 		motionProfile = new TrapezoidalMotionProfile(setpoint,velocityConstraints,new MechanismBounds(0,0,0));
@@ -53,12 +54,13 @@ public class MotionProfileTranslate extends Command {
 	@Override
 	protected boolean isFinished() {
 		double reachedSetpointThreshold = 1;
-		
-		return (motionProfile.isFinished() && Math.abs(DriveTrain.getInstance().getLeftEncoder() - (setpoint + leftStartPos)) < reachedSetpointThreshold && Math.abs(DriveTrain.getInstance().getRightEncoder() - (setpoint + rightStartPos)) < reachedSetpointThreshold) || isTimedOut();
+		System.out.println(Math.abs((DriveTrain.getInstance().getLeftEncoder()/DriveConstants.DRIVE_TICKS_PER_INCH)-leftStartPos - setpoint)< reachedSetpointThreshold);
+		return (Math.abs((DriveTrain.getInstance().getLeftEncoder()/DriveConstants.DRIVE_TICKS_PER_INCH)-leftStartPos - setpoint) < reachedSetpointThreshold && Math.abs((DriveTrain.getInstance().getRightEncoder()/DriveConstants.DRIVE_TICKS_PER_INCH)-rightStartPos - setpoint) < reachedSetpointThreshold) || isTimedOut();
 	}
 	
 	@Override
 	protected void end() {
+		System.out.println("End");
 		DriveTrain.getInstance().tankVelocity(velocityConstraints.getEndVelocity(), velocityConstraints.getEndVelocity());
 	}
 	

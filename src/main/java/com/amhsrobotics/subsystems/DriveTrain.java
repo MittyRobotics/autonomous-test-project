@@ -90,10 +90,10 @@ public class DriveTrain extends Subsystem {
 	double leftLastMeasured = 0;
 	double rightLastMeasured = 0;
 
-	double Kv = 0.12; //0.12
-	double Ka = 0.0; //0.0
-	double Kp = 0.001; //0.001
-	double Kt = 30;
+	final double kV = 0.1; //0.1
+	final double kA = 0.0; //0.0
+	final double kP = 0.01; //0.01
+	final double kT = 20;
 
 	public void customTankVelocity(double leftVel, double rightVel, double angle){
 		double left;
@@ -103,14 +103,12 @@ public class DriveTrain extends Subsystem {
 
 		SmartDashboard.putNumber("ANGLE_TO_LOOKAHEAD", angle);
 
-		angle = angle / 45;
+		angle = angle / 90;
 		angle = Math.max(-1, Math.min(angle,1));
-		double sign = Math.signum(angle);
-		angle = Math.pow(angle,2) * sign;
 
 		System.out.println(angle);
 
-		double turn = angle * Kt;
+		double turn = angle * kT;
 
 		leftVel += turn;
 		rightVel -= turn;
@@ -122,22 +120,22 @@ public class DriveTrain extends Subsystem {
 		SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT_MODIFIED", rightVel);
 
 		double measuredLeft = DriveTrain.getInstance().getLeftVelocityInches();
-		double FFLeft = Kv * leftVel + Ka * ((measuredLeft - leftLastMeasured)/.02);
+		double FFLeft = kV * leftVel + kA * ((measuredLeft - leftLastMeasured)/.02);
 		leftLastMeasured = measuredLeft;
 		double errorLeft = leftVel - measuredLeft;
-		double FBLeft = Kp * errorLeft;
+		double FBLeft = kP * errorLeft;
 		left = (FFLeft + FBLeft);
 		left = Math.max(-12, Math.min(12,left));
 
 		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
 
-		double FFRight = Kv * rightVel + Ka * ((measuredRight - leftLastMeasured)/.02);
+		double FFRight = kV * rightVel + kA * ((measuredRight - leftLastMeasured)/.02);
 
 		rightLastMeasured = measuredRight;
 
 		double errorRight = rightVel - measuredRight;
 
-		double FBRight = Kp * errorRight;
+		double FBRight = kP * errorRight;
 
 		right = (FFRight + FBRight);
 
@@ -161,22 +159,22 @@ public class DriveTrain extends Subsystem {
 		SmartDashboard.putNumber("RIGHT_WHEEL_SETPOINT_MODIFIED", rightVel);
 
 		double measuredLeft = DriveTrain.getInstance().getLeftVelocityInches();
-		double FFLeft = Kv * leftVel + Ka * ((measuredLeft - leftLastMeasured)/.02);
+		double FFLeft = kV * leftVel + kA * ((measuredLeft - leftLastMeasured)/.02);
 		leftLastMeasured = measuredLeft;
 		double errorLeft = leftVel - measuredLeft;
-		double FBLeft = Kp * errorLeft;
+		double FBLeft = kP * errorLeft;
 		left = (FFLeft + FBLeft);
 		left = Math.max(-12, Math.min(12,left));
 
 		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
 
-		double FFRight = Kv * rightVel + Ka * ((measuredRight - leftLastMeasured)/.02);
+		double FFRight = kV * rightVel + kA * ((measuredRight - leftLastMeasured)/.02);
 
 		rightLastMeasured = measuredRight;
 
 		double errorRight = rightVel - measuredRight;
 
-		double FBRight = Kp * errorRight;
+		double FBRight = kP * errorRight;
 
 		right = (FFRight + FBRight);
 

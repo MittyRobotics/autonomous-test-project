@@ -18,7 +18,7 @@ public class Translate2dTrajectory extends Command {
 		requires(DriveTrain.getInstance());
 		this.path = path;
 		this.reversed = reversed;
-		this.controller = new PurePursuitController(path,40,25, reversed);
+		this.controller = new PurePursuitController(path,20,20, reversed);
 		System.out.println("Constructor");
 	}
 
@@ -31,10 +31,6 @@ public class Translate2dTrajectory extends Command {
 	protected void execute() {
 		double t = timeSinceInitialized();
 		PurePursuitOutput output = controller.update(t);
-		if(controller.getPath().getTrajectoryPoints()[controller.getPath().getTrajectoryPoints().length-1].distance(new TrajectoryPoint(PathFollowerPosition.getInstance().getPathCentricX(), PathFollowerPosition.getInstance().getPathCentricY())) < 40){
-			output.setLeftVelocity( output.getLeftVelocity()/2);
-			output.setRightVelocity( output.getRightVelocity()/2);
-		}
 		DriveTrain.getInstance().customTankVelocity(output.getLeftVelocity(), output.getRightVelocity(),output.getAngleToLookahead());
 	}
 
