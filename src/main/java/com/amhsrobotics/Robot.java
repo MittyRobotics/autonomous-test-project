@@ -7,10 +7,7 @@
 
 package com.amhsrobotics;
 
-import com.amhsrobotics.autonomous.commands.CommandGroupForTesting;
-import com.amhsrobotics.autonomous.commands.MotionProfileTranslate;
 import com.amhsrobotics.autonomous.commands.Translate2dTrajectory;
-import com.amhsrobotics.constants.DriveConstants;
 import com.amhsrobotics.purepursuit.PathFollowerPosition;
 import com.amhsrobotics.purepursuit.VelocityConstraints;
 import com.amhsrobotics.purepursuit.coordinate.Coordinate;
@@ -19,15 +16,16 @@ import com.amhsrobotics.purepursuit.paths.Path;
 import com.amhsrobotics.subsystems.TankDrive;
 import com.amhsrobotics.subsystems.DriveTrain;
 import com.amhsrobotics.subsystems.Gyro;
-import com.amhsrobotics.subsystems.TankVelocity;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
+	public static double PERIOD = 0.02;
+	
     public Robot() {
-        super(0.06);
+        super(PERIOD);
     }
 
     Translate2dTrajectory command;
@@ -92,7 +90,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-
     }
 
     @Override
@@ -125,4 +122,9 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
     }
+	
+	@Override
+	public double getPeriod() {
+		return super.getPeriod();
+	}
 }

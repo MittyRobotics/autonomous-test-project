@@ -60,9 +60,6 @@ dependencies {
     compile 'com.github.Mittyrobotics:pure-pursuit-controller:c3f0eb3942'
     compile 'com.github.Mittyrobotics:motion-profile-generator:v2.0'
 
-    // https://mvnrepository.com/artifact/org.jfree/jfreechart
-    compile group: 'org.jfree', name: 'jfreechart', version: '1.5.0'
-
     testCompile 'junit:junit:4.12'
 }
 
