@@ -30,7 +30,7 @@ public class DriveTrain extends Subsystem {
 			WPI_TalonSRX talonSRX = new WPI_TalonSRX(LEFT_DRIVE_TALON_ID[i]);
 			talonSRX.configFactoryDefault();
 			talonSRX.setInverted(LEFT_DRIVE_TALON_INVERSION[i]);
-			talonSRX.setNeutralMode(NeutralMode.EEPROMSetting);
+			talonSRX.setNeutralMode(NeutralMode.Brake);
 			if (i == 0) {
 				talonSRX.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 				talonSRX.setSensorPhase(LEFT_DRIVE_ENCODER_INVERSION);
@@ -45,7 +45,7 @@ public class DriveTrain extends Subsystem {
 			WPI_TalonSRX talonSRX = new WPI_TalonSRX(RIGHT_DRIVE_TALON_ID[i]);
 			talonSRX.configFactoryDefault();
 			talonSRX.setInverted(RIGHT_DRIVE_TALON_INVERSION[i]);
-			talonSRX.setNeutralMode(NeutralMode.EEPROMSetting);
+			talonSRX.setNeutralMode(NeutralMode.Brake);
 			if (i == 0) {
 				talonSRX.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 				talonSRX.setSensorPhase(RIGHT_DRIVE_ENCODER_INVERSION);
@@ -90,10 +90,10 @@ public class DriveTrain extends Subsystem {
 	double leftLastMeasured = 0;
 	double rightLastMeasured = 0;
 
-	final double kV = 0.1; //0.1
+	final double kV = 0.12; //0.12
 	final double kA = 0.0; //0.0
 	final double kP = 0.01; //0.01
-	final double kT = 20;
+	final double kT = 10;
 
 	public void customTankVelocity(double leftVel, double rightVel, double angle){
 		double left;
@@ -103,7 +103,7 @@ public class DriveTrain extends Subsystem {
 
 		SmartDashboard.putNumber("ANGLE_TO_LOOKAHEAD", angle);
 
-		angle = angle / 90;
+		angle = angle / 45;
 		angle = Math.max(-1, Math.min(angle,1));
 
 		System.out.println(angle);

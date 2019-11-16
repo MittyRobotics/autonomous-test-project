@@ -45,11 +45,12 @@ public class Robot extends TimedRobot {
         //FORWARD:
         Coordinate[] coordinates = new Coordinate[]{
                 new Coordinate(0, 0, 0),
-                new Coordinate(-50, 70, 0),
+                new Coordinate(0, 25, 0),
+                new Coordinate(-50, 75, 0),
                 new Coordinate(-50, 100, 0)
         };
 
-        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,30,150,10,50,0,.8));
+        Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,30,100,10,30,0,.8));
         command = new Translate2dTrajectory(path,false);
 
 

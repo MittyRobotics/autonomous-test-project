@@ -17,11 +17,12 @@ public class VisualizePurePursuit {
 		//FORWARD:
 		Coordinate[] coordinates = new Coordinate[]{
 				new Coordinate(0, 0, 0),
-				new Coordinate(-50, 74, 0),
+				new Coordinate(0, 25, 0),
+				new Coordinate(-50, 75, 0),
 				new Coordinate(-50, 100, 0)
 		};
 
-		Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,50,150,10,50,0,.8), 100, 2);
+		Path path = new CubicHermitePath(coordinates,new VelocityConstraints(50,50,150,10,50,0,10), 0, 2);
 		PurePursuitSimulatorGraph.getInstance().graphPath(path);
 		PurePursuitSimulatorGraph.getInstance().resizeGraph();
 //		PurePursuitController controller = new PurePursuitController(path, 20, 10, false);
