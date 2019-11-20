@@ -93,7 +93,7 @@ public class DriveTrain extends Subsystem {
 	final double kV = 0.12; //0.12
 	final double kA = 0.0; //0.0
 	final double kP = 0.01; //0.01
-	final double kT = 10;
+	final double kT = 0;
 
 	public void customTankVelocity(double leftVel, double rightVel, double angle){
 		double left;
