@@ -2,15 +2,18 @@ package com.amhsrobotics;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class TKOSubsystemTest extends TKOSubsystem{
+public class TKOSubsystemTest extends Subsystem implements TKOSubsystem {
 	private WPI_TalonSRX talon;
 	
 	@Override
-	public void setMotor(double percentOutput) {
-		talon.set(ControlMode.PercentOutput,percentOutput);
+	public void setMotor( double percentOutput) {
+		talon.set(percentOutput);
 	}
-	
+
+
 	@Override
 	public double getPosition() {
 		return talon.getSelectedSensorPosition();
