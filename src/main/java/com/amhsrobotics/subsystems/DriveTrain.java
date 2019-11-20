@@ -129,7 +129,7 @@ public class DriveTrain extends Subsystem {
 
 		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
 
-		double FFRight = kV * rightVel + kA * ((measuredRight - leftLastMeasured)/.02);
+		double FFRight = kV * rightVel + kA * ((measuredRight - rightLastMeasured)/.02);
 
 		rightLastMeasured = measuredRight;
 
@@ -168,7 +168,7 @@ public class DriveTrain extends Subsystem {
 
 		double measuredRight = DriveTrain.getInstance().getRightVelocityInches() ;
 
-		double FFRight = kV * rightVel + kA * ((measuredRight - leftLastMeasured)/.02);
+		double FFRight = kV * rightVel + kA * ((measuredRight - rightLastMeasured)/.02);
 
 		rightLastMeasured = measuredRight;
 
